@@ -23,14 +23,15 @@ export default function LiveScamChat() {
     setLoading(true);
 
     try {
-      const response = await fetch('http://localhost:5000/api/live-scam', {
+      // FIXED: Pointing to /api/chat to match your server.js
+      const response = await fetch('http://localhost:5000/api/chat', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
+        // FIXED: Sending exactly { message: "text" } to match what Express is looking for
         body: JSON.stringify({
-          messages: messages,
-          input: currentInput,
+          message: currentInput,
         }),
       });
 
@@ -77,25 +78,22 @@ export default function LiveScamChat() {
         {messages.map((msg, index) => (
           <div
             key={index}
-            className={`flex items-start gap-2.5 max-w-[85%] ${
-              msg.sender === 'user' ? 'ml-auto flex-row-reverse' : ''
-            }`}
+            className={`flex items-start gap-2.5 max-w-[85%] ${msg.sender === 'user' ? 'ml-auto flex-row-reverse' : ''
+              }`}
           >
             <div
-              className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 text-xs font-semibold ${
-                msg.sender === 'user'
+              className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 text-xs font-semibold ${msg.sender === 'user'
                   ? 'bg-indigo-600 text-white'
                   : 'bg-slate-800 text-slate-300 border border-slate-700'
-              }`}
+                }`}
             >
               {msg.sender === 'user' ? <User className="w-4 h-4" /> : <Bot className="w-4 h-4" />}
             </div>
             <div
-              className={`p-3 rounded-2xl text-sm leading-relaxed ${
-                msg.sender === 'user'
+              className={`p-3 rounded-2xl text-sm leading-relaxed ${msg.sender === 'user'
                   ? 'bg-indigo-600 text-white rounded-tr-none'
                   : 'bg-slate-800/90 text-slate-200 border border-slate-700/60 rounded-tl-none'
-              }`}
+                }`}
             >
               {msg.text}
             </div>
